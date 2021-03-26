@@ -2,27 +2,35 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
+using System;
+using UnityEngine.SceneManagement;
+
 
 public class PowerBar : MonoBehaviour
 {
     [SerializeField]
     private Image imagePower;
     [SerializeField]
-    private TMP_Text textPower;
-
-    private bool isPowerUp = false;
+    public Text textPower;
+    
     private bool isDirectionUp = true;
-    private float ammntPower = 0.0f;
-    private float speedPower = 500.0f;
-    // Start is called before the first frame update
+    public float ammntPower = 0.0f;
+    private float speedPower = 50.0f;
+    
+    public Rigidbody rb;
+    public GameObject ball;
+    public GameObject button;
 
 
-    // Update is called once per frame
+    void Start() {
+        Rigidbody rb = GetComponent<Rigidbody>();
+        button.SetActive(true);
+    }
     void Update()
-    {
-        if (isPowerUp){
-            PowerActive();
+    {   
+        PowerActive();
+        if(Input.GetButtonDown("Fire1")){   
+            EndPower();          
         }
     }
     public void PowerActive(){
@@ -41,17 +49,16 @@ public class PowerBar : MonoBehaviour
             }
         }
         imagePower.fillAmount = (0f - 1f) * ammntPower / 100.0f + 1f;
-    }
-    public void PowerUp()
-    {
-        isPowerUp = true;
-        ammntPower = 0.0f;
-        isDirectionUp = true;
         textPower.text = ammntPower.ToString("F0");
     }
+
     public void EndPower()
     {
-        isPowerUp = false;
+        rb.AddForce(Vector3.up * ammntPower * 200.0f);
+        rb.AddForce(Vector3.left * ammntPower * 190.0f);
         textPower.text = ammntPower.ToString("F0");
     }
+    
 }
+ 
+
